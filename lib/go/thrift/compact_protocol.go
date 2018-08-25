@@ -29,7 +29,8 @@ import (
 
 const (
 	COMPACT_PROTOCOL_ID       = 0x082
-	COMPACT_VERSION           = 1
+	COMPACT_VERSION           = 0x01
+	COMPACT_VERSION_BE        = 0x02
 	COMPACT_VERSION_MASK      = 0x1f
 	COMPACT_TYPE_MASK         = 0x0E0
 	COMPACT_TYPE_BITS         = 0x07
@@ -104,11 +105,13 @@ type TCompactProtocol struct {
 	boolValue          bool
 	boolValueIsNotNull bool
 	buffer             [64]byte
+
+        version int
 }
 
 // Create a TCompactProtocol given a TTransport
 func NewTCompactProtocol(trans TTransport) *TCompactProtocol {
-	p := &TCompactProtocol{origTransport: trans, lastField: []int{}}
+	p := &TCompactProtocol{origTransport: trans, lastField: []int{}, version: COMPACT_VERSION_BE}
 	if et, ok := trans.(TRichTransport); ok {
 		p.trans = et
 	} else {
@@ -126,21 +129,20 @@ func NewTCompactProtocol(trans TTransport) *TCompactProtocol {
 // Write a message header to the wire. Compact Protocol messages contain the
 // protocol version so we can migrate forwards in the future if need be.
 func (p *TCompactProtocol) WriteMessageBegin(name string, typeId TMessageType, seqid int32) error {
-	err := p.writeByteDirect(COMPACT_PROTOCOL_ID)
-	if err != nil {
-		return NewTProtocolException(err)
-	}
-	err = p.writeByteDirect((COMPACT_VERSION & COMPACT_VERSION_MASK) | ((byte(typeId) << COMPACT_TYPE_SHIFT_AMOUNT) & COMPACT_TYPE_MASK))
-	if err != nil {
-		return NewTProtocolException(err)
-	}
-	_, err = p.writeVarint32(seqid)
-	if err != nil {
-		return NewTProtocolException(err)
-	}
-	e := p.WriteString(name)
-	return e
-
+        err := p.writeByteDirect(COMPACT_PROTOCOL_ID)
+        if err != nil {
+                return NewTProtocolException(err)
+        }
+        err = p.writeByteDirect((byte(p.version) & COMPACT_VERSION_MASK) | ((byte(typeId) << COMPACT_TYPE_SHIFT_AMOUNT) & COMPACT_TYPE_MASK))
+        if err != nil {
+                return NewTProtocolException(err)
+        }
+        _, err = p.writeVarint32(seqid)
+        if err != nil {
+                return NewTProtocolException(err)
+        }
+        e := p.WriteString(name)
+        return e
 }
 
 func (p *TCompactProtocol) WriteMessageEnd() error { return nil }
@@ -348,11 +350,13 @@ func (p *TCompactProtocol) ReadMessageBegin() (name string, typeId TMessageType,
 
 	version := versionAndType & COMPACT_VERSION_MASK
 	typeId = TMessageType((versionAndType >> COMPACT_TYPE_SHIFT_AMOUNT) & COMPACT_TYPE_BITS)
-	if version != COMPACT_VERSION {
-		e := fmt.Errorf("Expected version %02x but got %02x", COMPACT_VERSION, version)
-		err = NewTProtocolExceptionWithType(BAD_VERSION, e)
-		return
-	}
+        if version == COMPACT_VERSION || version == COMPACT_VERSION_BE {
+                p.version = int(version)
+        } else {
+                e := fmt.Errorf("Expected version %02x or %02x but got %02x", COMPACT_VERSION, COMPACT_VERSION_BE, version)
+                err = NewTProtocolExceptionWithType(BAD_VERSION, e)
+                return
+        }
 	seqId, e := p.readVarint32()
 	if e != nil {
 		err = NewTProtocolException(e)

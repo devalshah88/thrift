@@ -183,16 +183,31 @@ func (p *TSimpleServer) Stop() error {
 
 func (p *TSimpleServer) processRequests(client TTransport) error {
 	processor := p.processorFactory.GetProcessor(client)
+
+	var (
+		inputTransport, outputTransport TTransport
+		inputProtocol, outputProtocol   TProtocol
+	)
+
 	inputTransport, err := p.inputTransportFactory.GetTransport(client)
 	if err != nil {
 		return err
 	}
-	outputTransport, err := p.outputTransportFactory.GetTransport(client)
-	if err != nil {
-		return err
+
+	// Special case for THeader, it requires that the transport/protocol for
+	// input/output is the same object (to track session state).
+	if _, ok := inputTransport.(*THeaderTransport); ok {
+		outputTransport = nil
+		inputProtocol = p.inputProtocolFactory.GetProtocol(inputTransport)
+		outputProtocol = inputProtocol
+	} else {
+		outputTransport, err := p.outputTransportFactory.GetTransport(client)
+		if err != nil {
+			return err
+		}
+		inputProtocol = p.inputProtocolFactory.GetProtocol(inputTransport)
+		outputProtocol = p.outputProtocolFactory.GetProtocol(outputTransport)
 	}
-	inputProtocol := p.inputProtocolFactory.GetProtocol(inputTransport)
-	outputProtocol := p.outputProtocolFactory.GetProtocol(outputTransport)
 	defer func() {
 		if e := recover(); e != nil {
 			log.Printf("panic in processor: %s: %s", e, debug.Stack())

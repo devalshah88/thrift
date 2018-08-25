@@ -41,6 +41,7 @@ const (
 	ALREADY_OPEN                = 2
 	TIMED_OUT                   = 3
 	END_OF_FILE                 = 4
+	INVALID_FRAME_SIZE          = 5
 )
 
 type tTransportException struct {

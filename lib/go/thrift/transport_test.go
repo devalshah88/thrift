@@ -51,6 +51,13 @@ func TransportTest(t *testing.T, writeTrans TTransport, readTrans TTransport) {
 	if !readTrans.IsOpen() {
 		t.Fatalf("Transport %T not open: %s", readTrans, readTrans)
 	}
+
+	// Special case for header transport -- need to reset protocol on read
+	var headerTrans *THeaderTransport
+	if hdr, ok := readTrans.(*THeaderTransport); ok {
+		headerTrans = hdr
+	}
+
 	_, err := writeTrans.Write(transport_bdata)
 	if err != nil {
 		t.Fatalf("Transport %T cannot write binary data of length %d: %s", writeTrans, len(transport_bdata), err)
@@ -58,6 +65,12 @@ func TransportTest(t *testing.T, writeTrans TTransport, readTrans TTransport) {
 	err = writeTrans.Flush(context.Background())
 	if err != nil {
 		t.Fatalf("Transport %T cannot flush write of binary data: %s", writeTrans, err)
+	}
+	if headerTrans != nil {
+		err = headerTrans.ResetProtocol()
+		if err != nil {
+			t.Errorf("Header Transport %T cannot read binary data frame", readTrans)
+		}
 	}
 	n, err := io.ReadFull(readTrans, buf)
 	if err != nil {
@@ -78,6 +91,12 @@ func TransportTest(t *testing.T, writeTrans TTransport, readTrans TTransport) {
 	err = writeTrans.Flush(context.Background())
 	if err != nil {
 		t.Fatalf("Transport %T cannot flush write binary data 2: %s", writeTrans, err)
+	}
+	if headerTrans != nil {
+		err = headerTrans.ResetProtocol()
+		if err != nil {
+			t.Errorf("Header Transport %T cannot read binary data frame 2", readTrans)
+		}
 	}
 	buf = make([]byte, TRANSPORT_BINARY_DATA_SIZE)
 	read := 1

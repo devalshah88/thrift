@@ -29,6 +29,9 @@ import (
 	"math"
 )
 
+const BinaryVersionMask uint32 = 0xffff0000
+const BinaryVersion1 uint32 = 0x80010000
+
 type TBinaryProtocol struct {
 	trans         TRichTransport
 	origTransport TTransport

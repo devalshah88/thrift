@@ -25,6 +25,36 @@ import (
 	"fmt"
 )
 
+type ProtocolID int16
+
+const (
+        ProtocolIDBinary     ProtocolID = 0
+        ProtocolIDJSON       ProtocolID = 1
+        ProtocolIDCompact    ProtocolID = 2
+        ProtocolIDDebug      ProtocolID = 3
+        ProtocolIDVirtual    ProtocolID = 4
+        ProtocolIDSimpleJSON ProtocolID = 5
+)
+
+func (p ProtocolID) String() string {
+        switch p {
+        case ProtocolIDBinary:
+                return "binary"
+        case ProtocolIDJSON:
+                return "json"
+        case ProtocolIDCompact:
+                return "compact"
+        case ProtocolIDDebug:
+                return "debug"
+        case ProtocolIDVirtual:
+                return "virtual"
+        case ProtocolIDSimpleJSON:
+                return "simplejson"
+        default:
+                return "unknown"
+        }
+}
+
 const (
 	VERSION_MASK = 0xffff0000
 	VERSION_1    = 0x80010000
