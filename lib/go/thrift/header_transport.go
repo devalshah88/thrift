@@ -23,7 +23,6 @@ import (
 	"bufio"
 	"bytes"
 	"compress/zlib"
-	"context"
 	"encoding/binary"
 	"fmt"
 	"io/ioutil"
@@ -429,7 +428,7 @@ func (t *THeaderTransport) flushFramed() error {
 	return NewTTransportExceptionFromError(err)
 }
 
-func (t *THeaderTransport) Flush(ctx context.Context) error {
+func (t *THeaderTransport) Flush() error {
 	// Closure incase wbuf pointer changes in xform
 	defer func(tp *THeaderTransport) {
 		tp.wbuf.Reset()
@@ -469,6 +468,6 @@ func (t *THeaderTransport) Flush(ctx context.Context) error {
 	// Remove the non-persistent headers on flush
 	t.ClearHeaders()
 
-	err = t.transport.Flush(ctx)
+	err = t.transport.Flush()
 	return NewTTransportExceptionFromError(err)
 }

@@ -20,7 +20,6 @@
 package thrift
 
 import (
-	"context"
 	"fmt"
 )
 
@@ -99,9 +98,8 @@ func (p *THeaderProtocol) ReadMessageBegin() (name string, typeId TMessageType, 
 
 	return p.TProtocol.ReadMessageBegin()
 }
-
-func (p *THeaderProtocol) Flush(ctx context.Context) (err error) {
-	return NewTProtocolException(p.trans.Flush(ctx))
+func (p *THeaderProtocol) Flush() (err error) {
+	return NewTProtocolException(p.trans.Flush())
 }
 
 func (p *THeaderProtocol) Skip(fieldType TType) (err error) {

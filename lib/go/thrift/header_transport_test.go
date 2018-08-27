@@ -21,7 +21,6 @@ package thrift
 
 import (
 	"bytes"
-	"context"
 	"encoding/hex"
 	"io"
 	"io/ioutil"
@@ -51,7 +50,7 @@ func testHeaderToProto(t *testing.T, clientType ClientType, tmb *TMemoryBuffer, 
 	if err != nil {
 		t.Fatalf("failed to finalize message for clientType: %s", clientType)
 	}
-	err = proto.Flush(context.Background())
+	err = proto.Flush()
 	if err != nil {
 		t.Fatalf("failed to flush message for clientType: %s", clientType)
 	}
@@ -80,7 +79,7 @@ func testHeaderToProto(t *testing.T, clientType ClientType, tmb *TMemoryBuffer, 
 	if err != nil {
 		t.Fatalf("failed to write to header transport: %s", err)
 	}
-	err = headertrans.Flush(context.Background())
+	err = headertrans.Flush()
 	if err != nil {
 		t.Fatalf("failed to flush to header transport: %s", err)
 	}
@@ -162,7 +161,7 @@ func TestHeaderProtoID(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to write frame %d: %s", n, err)
 	}
-	err = trans1.Flush(context.Background())
+	err = trans1.Flush()
 	if err != nil {
 		t.Fatalf("failed to xmit frame %d: %s", n, err)
 	}
@@ -207,7 +206,7 @@ func TestHeaderHeaders(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to write frame %d: %s", n, err)
 	}
-	err = trans1.Flush(context.Background())
+	err = trans1.Flush()
 	if err != nil {
 		t.Fatalf("failed to xmit frame %d: %s", n, err)
 	}
@@ -260,7 +259,7 @@ func TestHeaderRWSmall(t *testing.T) {
 		t.Fatalf("failed to writestring frame %d: %s", n, err)
 	}
 
-	err = trans.Flush(context.Background())
+	err = trans.Flush()
 	if err != nil {
 		t.Fatalf("failed to xmit frame %d: %s", n, err)
 	}
@@ -323,7 +322,7 @@ func TestHeaderZlib(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to write frame %d: %s", n, err)
 	}
-	err = trans.Flush(context.Background())
+	err = trans.Flush()
 	if err != nil {
 		t.Fatalf("failed to xmit frame %d: %s", n, err)
 	}
@@ -354,7 +353,7 @@ func testRWOnce(t *testing.T, n int, data []byte, trans *THeaderTransport) {
 	if err != nil {
 		t.Fatalf("failed to write frame %d: %s", n, err)
 	}
-	err = trans.Flush(context.Background())
+	err = trans.Flush()
 	if err != nil {
 		t.Fatalf("failed to xmit frame %d: %s", n, err)
 	}

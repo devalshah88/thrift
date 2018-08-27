@@ -20,7 +20,6 @@
 package thrift
 
 import (
-	"context"
 	"testing"
 )
 
@@ -52,7 +51,7 @@ func TestTHeaderProtoclHeaders(t *testing.T) {
 
 	proto1.WriteMessageBegin("", CALL, 1)
 	proto1.WriteMessageEnd()
-	proto1.Flush(context.Background())
+	proto1.Flush()
 
 	_, _, _, err := proto2.ReadMessageBegin()
 	if err != nil {
