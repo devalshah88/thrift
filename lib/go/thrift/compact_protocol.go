@@ -20,7 +20,6 @@
 package thrift
 
 import (
-	"context"
 	"encoding/binary"
 	"fmt"
 	"io"
@@ -604,8 +603,8 @@ func (p *TCompactProtocol) ReadBinary() (value []byte, err error) {
 	return buf, NewTProtocolException(e)
 }
 
-func (p *TCompactProtocol) Flush(ctx context.Context) (err error) {
-	return NewTProtocolException(p.trans.Flush(ctx))
+func (p *TCompactProtocol) Flush() (err error) {
+	return NewTProtocolException(p.trans.Flush())
 }
 
 func (p *TCompactProtocol) Skip(fieldType TType) (err error) {

@@ -20,7 +20,6 @@
 package tests
 
 import (
-	"context"
 	"multiplexedprotocoltest"
 	"net"
 	"testing"
@@ -35,18 +34,6 @@ func FindAvailableTCPServerPort() net.Addr {
 		defer l.Close()
 		return l.Addr()
 	}
-}
-
-type FirstImpl struct{}
-
-func (f *FirstImpl) ReturnOne(ctx context.Context) (r int64, err error) {
-	return 1, nil
-}
-
-type SecondImpl struct{}
-
-func (s *SecondImpl) ReturnTwo(ctx context.Context) (r int64, err error) {
-	return 2, nil
 }
 
 func createTransport(addr net.Addr) (thrift.TTransport, error) {

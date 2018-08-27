@@ -18,8 +18,7 @@
 # - dart: does not come with Ubuntu
 # - dotnet: does not come with Ubuntu
 # - haxe: version 3.4.2 that comes with Ubuntu cores in our CI build
-# - go: artful comes with 1.9, we want the latest (supported)
-# - nodejs: want v8, artful comes with v6
+# - nodejs: want v8, Ubuntu comes with v6
 #
 
 FROM buildpack-deps:artful-scm
@@ -141,6 +140,7 @@ RUN apt-get install -y --no-install-recommends \
 `# GlibC dependencies` \
       libglib2.0-dev
 
+<<<<<<< HEAD
 # golang
 ENV GOLANG_VERSION 1.10
 ENV GOLANG_DOWNLOAD_URL https://golang.org/dl/go$GOLANG_VERSION.linux-amd64.tar.gz
@@ -150,6 +150,12 @@ RUN curl -fsSL "$GOLANG_DOWNLOAD_URL" -o golang.tar.gz && \
             tar -C /usr/local -xzf golang.tar.gz && \
                   ln -s /usr/local/go/bin/go /usr/local/bin && \
                         rm golang.tar.gz
+=======
+RUN apt-get install -y --no-install-recommends \
+`# golang (go) dependencies` \
+      golang-go \
+      golang-race-detector-runtime
+>>>>>>> parent of 5785279e... THRIFT-4448: Golang: do something with context.Context. Remove Go1.6 compatibility.
 
 RUN apt-get install -y --no-install-recommends \
 `# Haskell dependencies` \

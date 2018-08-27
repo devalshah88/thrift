@@ -20,7 +20,6 @@
 package thrift
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"testing"
@@ -89,7 +88,7 @@ func ProtocolTest1(test *testing.T, pf ProtocolFactory) (bool, error) {
 	m.StringSet = make(map[string]struct{}, 5)
 	m.E = 2
 
-	s, err := t.WriteString(context.Background(), &m)
+	s, err := t.WriteString(&m)
 	if err != nil {
 		return false, errors.New(fmt.Sprintf("Unable to Serialize struct\n\t %s", err))
 	}
@@ -123,7 +122,7 @@ func ProtocolTest2(test *testing.T, pf ProtocolFactory) (bool, error) {
 	m.StringSet = make(map[string]struct{}, 5)
 	m.E = 2
 
-	s, err := t.WriteString(context.Background(), &m)
+	s, err := t.WriteString(&m)
 	if err != nil {
 		return false, errors.New(fmt.Sprintf("Unable to Serialize struct\n\t %s", err))
 

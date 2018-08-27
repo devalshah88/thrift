@@ -178,9 +178,9 @@ Last updated: October 1, 2017
 | d         | 2.075.1       | 2.081.0       |       |
 | dart      | 1.22.1        | 1.24.3        |       |
 | delphi    |               |               | Not in CI |
-| dotnet    | 2.1.4         | 2.1.301       |       |
-| erlang    | 18.3          | 20.2.2        |       |
-| go        | 1.7.6         | 1.10.3        |       |
+| dotnet    | 2.1.4         | 2.1.4         | v2.1.4 SDK uses v2.0.5 Runtime |
+| erlang    | 18.3          | 20.0.4        |       |
+| go        | 1.6.2         | 1.8.3         |       |
 | haskell   | 7.10.3        | 8.0.2         |       |
 | haxe      | 3.2.1         | 3.4.4         | THRIFT-4352: avoid 3.4.2 |
 | java      | 1.8.0_151     | 1.8.0_171     |       |
@@ -196,3 +196,5 @@ Last updated: October 1, 2017
 | rust      | 1.17.0        | 1.24.1        |       |
 | smalltalk |               |               | Not in CI |
 | swift     |               |               | Not in CI |
+
+

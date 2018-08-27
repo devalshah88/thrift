@@ -24,8 +24,6 @@ under the License.
 Using Thrift with Go
 ====================
 
-Thrift supports Go 1.7+
-
 In following Go conventions, we recommend you use the 'go' tool to install
 Thrift for go.
 

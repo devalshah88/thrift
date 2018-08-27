@@ -21,7 +21,6 @@ package thrift
 
 import (
 	"bytes"
-	"context"
 	"io/ioutil"
 	"math"
 	"net"
@@ -235,7 +234,7 @@ func ReadWriteBool(t testing.TB, p TProtocol, trans TTransport) {
 	if err != nil {
 		t.Errorf("%s: %T %T %v Error writing list end: %v", "ReadWriteBool", p, trans, err, BOOL_VALUES)
 	}
-	p.Flush(context.Background())
+	p.Flush()
 	thetype2, thelen2, err := p.ReadListBegin()
 	if err != nil {
 		t.Errorf("%s: %T %T %v Error reading list: %v", "ReadWriteBool", p, trans, err, BOOL_VALUES)
@@ -281,7 +280,7 @@ func ReadWriteByte(t testing.TB, p TProtocol, trans TTransport) {
 	if err != nil {
 		t.Errorf("%s: %T %T %q Error writing list end: %q", "ReadWriteByte", p, trans, err, BYTE_VALUES)
 	}
-	err = p.Flush(context.Background())
+	err = p.Flush()
 	if err != nil {
 		t.Errorf("%s: %T %T %q Error flushing list of bytes: %q", "ReadWriteByte", p, trans, err, BYTE_VALUES)
 	}
@@ -321,7 +320,7 @@ func ReadWriteI16(t testing.TB, p TProtocol, trans TTransport) {
 		p.WriteI16(v)
 	}
 	p.WriteListEnd()
-	p.Flush(context.Background())
+	p.Flush()
 	thetype2, thelen2, err := p.ReadListBegin()
 	if err != nil {
 		t.Errorf("%s: %T %T %q Error reading list: %q", "ReadWriteI16", p, trans, err, INT16_VALUES)
@@ -358,7 +357,7 @@ func ReadWriteI32(t testing.TB, p TProtocol, trans TTransport) {
 		p.WriteI32(v)
 	}
 	p.WriteListEnd()
-	p.Flush(context.Background())
+	p.Flush()
 	thetype2, thelen2, err := p.ReadListBegin()
 	if err != nil {
 		t.Errorf("%s: %T %T %q Error reading list: %q", "ReadWriteI32", p, trans, err, INT32_VALUES)
@@ -394,7 +393,7 @@ func ReadWriteI64(t testing.TB, p TProtocol, trans TTransport) {
 		p.WriteI64(v)
 	}
 	p.WriteListEnd()
-	p.Flush(context.Background())
+	p.Flush()
 	thetype2, thelen2, err := p.ReadListBegin()
 	if err != nil {
 		t.Errorf("%s: %T %T %q Error reading list: %q", "ReadWriteI64", p, trans, err, INT64_VALUES)
@@ -430,7 +429,7 @@ func ReadWriteDouble(t testing.TB, p TProtocol, trans TTransport) {
 		p.WriteDouble(v)
 	}
 	p.WriteListEnd()
-	p.Flush(context.Background())
+	p.Flush()
 	thetype2, thelen2, err := p.ReadListBegin()
 	if err != nil {
 		t.Errorf("%s: %T %T %v Error reading list: %v", "ReadWriteDouble", p, trans, err, DOUBLE_VALUES)
@@ -468,7 +467,7 @@ func ReadWriteString(t testing.TB, p TProtocol, trans TTransport) {
 		p.WriteString(v)
 	}
 	p.WriteListEnd()
-	p.Flush(context.Background())
+	p.Flush()
 	thetype2, thelen2, err := p.ReadListBegin()
 	if err != nil {
 		t.Errorf("%s: %T %T %q Error reading list: %q", "ReadWriteString", p, trans, err, STRING_VALUES)
@@ -499,7 +498,7 @@ func ReadWriteString(t testing.TB, p TProtocol, trans TTransport) {
 func ReadWriteBinary(t testing.TB, p TProtocol, trans TTransport) {
 	v := protocol_bdata
 	p.WriteBinary(v)
-	p.Flush(context.Background())
+	p.Flush()
 	value, err := p.ReadBinary()
 	if err != nil {
 		t.Errorf("%s: %T %T Unable to read binary: %s", "ReadWriteBinary", p, trans, err.Error())

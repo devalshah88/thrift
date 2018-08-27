@@ -1,3 +1,5 @@
+// +build !go1.7
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
@@ -17,10 +19,8 @@
  * under the License.
  */
 
-package tests
+package main
 
-import (
-	"context"
-)
+import "golang.org/x/net/context"
 
 var defaultCtx = context.Background()

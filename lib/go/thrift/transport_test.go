@@ -20,7 +20,6 @@
 package thrift
 
 import (
-	"context"
 	"io"
 	"net"
 	"strconv"
@@ -62,7 +61,7 @@ func TransportTest(t *testing.T, writeTrans TTransport, readTrans TTransport) {
 	if err != nil {
 		t.Fatalf("Transport %T cannot write binary data of length %d: %s", writeTrans, len(transport_bdata), err)
 	}
-	err = writeTrans.Flush(context.Background())
+	err = writeTrans.Flush()
 	if err != nil {
 		t.Fatalf("Transport %T cannot flush write of binary data: %s", writeTrans, err)
 	}
@@ -88,7 +87,7 @@ func TransportTest(t *testing.T, writeTrans TTransport, readTrans TTransport) {
 	if err != nil {
 		t.Fatalf("Transport %T cannot write binary data 2 of length %d: %s", writeTrans, len(transport_bdata), err)
 	}
-	err = writeTrans.Flush(context.Background())
+	err = writeTrans.Flush()
 	if err != nil {
 		t.Fatalf("Transport %T cannot flush write binary data 2: %s", writeTrans, err)
 	}
@@ -133,7 +132,7 @@ func TransportHeaderTest(t *testing.T, writeTrans TTransport, readTrans TTranspo
 	if err != nil {
 		t.Fatalf("Transport %T cannot write binary data of length %d: %s", writeTrans, len(transport_bdata), err)
 	}
-	err = writeTrans.Flush(context.Background())
+	err = writeTrans.Flush()
 	if err != nil {
 		t.Fatalf("Transport %T cannot flush write of binary data: %s", writeTrans, err)
 	}

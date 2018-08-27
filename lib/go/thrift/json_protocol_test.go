@@ -20,7 +20,6 @@
 package thrift
 
 import (
-	"context"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -37,7 +36,7 @@ func TestWriteJSONProtocolBool(t *testing.T) {
 		if e := p.WriteBool(value); e != nil {
 			t.Fatalf("Unable to write %s value %v due to error: %s", thetype, value, e.Error())
 		}
-		if e := p.Flush(context.Background()); e != nil {
+		if e := p.Flush(); e != nil {
 			t.Fatalf("Unable to write %s value %v due to error flushing: %s", thetype, value, e.Error())
 		}
 		s := trans.String()
@@ -69,7 +68,7 @@ func TestReadJSONProtocolBool(t *testing.T) {
 		} else {
 			trans.Write([]byte{'0'}) // not JSON_FALSE
 		}
-		trans.Flush(context.Background())
+		trans.Flush()
 		s := trans.String()
 		v, e := p.ReadBool()
 		if e != nil {
@@ -95,7 +94,7 @@ func TestWriteJSONProtocolByte(t *testing.T) {
 		if e := p.WriteByte(value); e != nil {
 			t.Fatalf("Unable to write %s value %v due to error: %s", thetype, value, e.Error())
 		}
-		if e := p.Flush(context.Background()); e != nil {
+		if e := p.Flush(); e != nil {
 			t.Fatalf("Unable to write %s value %v due to error flushing: %s", thetype, value, e.Error())
 		}
 		s := trans.String()
@@ -117,7 +116,7 @@ func TestReadJSONProtocolByte(t *testing.T) {
 		trans := NewTMemoryBuffer()
 		p := NewTJSONProtocol(trans)
 		trans.WriteString(strconv.Itoa(int(value)))
-		trans.Flush(context.Background())
+		trans.Flush()
 		s := trans.String()
 		v, e := p.ReadByte()
 		if e != nil {
@@ -142,7 +141,7 @@ func TestWriteJSONProtocolI16(t *testing.T) {
 		if e := p.WriteI16(value); e != nil {
 			t.Fatalf("Unable to write %s value %v due to error: %s", thetype, value, e.Error())
 		}
-		if e := p.Flush(context.Background()); e != nil {
+		if e := p.Flush(); e != nil {
 			t.Fatalf("Unable to write %s value %v due to error flushing: %s", thetype, value, e.Error())
 		}
 		s := trans.String()
@@ -164,7 +163,7 @@ func TestReadJSONProtocolI16(t *testing.T) {
 		trans := NewTMemoryBuffer()
 		p := NewTJSONProtocol(trans)
 		trans.WriteString(strconv.Itoa(int(value)))
-		trans.Flush(context.Background())
+		trans.Flush()
 		s := trans.String()
 		v, e := p.ReadI16()
 		if e != nil {
@@ -189,7 +188,7 @@ func TestWriteJSONProtocolI32(t *testing.T) {
 		if e := p.WriteI32(value); e != nil {
 			t.Fatalf("Unable to write %s value %v due to error: %s", thetype, value, e.Error())
 		}
-		if e := p.Flush(context.Background()); e != nil {
+		if e := p.Flush(); e != nil {
 			t.Fatalf("Unable to write %s value %v due to error flushing: %s", thetype, value, e.Error())
 		}
 		s := trans.String()
@@ -211,7 +210,7 @@ func TestReadJSONProtocolI32(t *testing.T) {
 		trans := NewTMemoryBuffer()
 		p := NewTJSONProtocol(trans)
 		trans.WriteString(strconv.Itoa(int(value)))
-		trans.Flush(context.Background())
+		trans.Flush()
 		s := trans.String()
 		v, e := p.ReadI32()
 		if e != nil {
@@ -236,7 +235,7 @@ func TestWriteJSONProtocolI64(t *testing.T) {
 		if e := p.WriteI64(value); e != nil {
 			t.Fatalf("Unable to write %s value %v due to error: %s", thetype, value, e.Error())
 		}
-		if e := p.Flush(context.Background()); e != nil {
+		if e := p.Flush(); e != nil {
 			t.Fatalf("Unable to write %s value %v due to error flushing: %s", thetype, value, e.Error())
 		}
 		s := trans.String()
@@ -258,7 +257,7 @@ func TestReadJSONProtocolI64(t *testing.T) {
 		trans := NewTMemoryBuffer()
 		p := NewTJSONProtocol(trans)
 		trans.WriteString(strconv.FormatInt(value, 10))
-		trans.Flush(context.Background())
+		trans.Flush()
 		s := trans.String()
 		v, e := p.ReadI64()
 		if e != nil {
@@ -283,7 +282,7 @@ func TestWriteJSONProtocolDouble(t *testing.T) {
 		if e := p.WriteDouble(value); e != nil {
 			t.Fatalf("Unable to write %s value %v due to error: %s", thetype, value, e.Error())
 		}
-		if e := p.Flush(context.Background()); e != nil {
+		if e := p.Flush(); e != nil {
 			t.Fatalf("Unable to write %s value %v due to error flushing: %s", thetype, value, e.Error())
 		}
 		s := trans.String()
@@ -320,7 +319,7 @@ func TestReadJSONProtocolDouble(t *testing.T) {
 		p := NewTJSONProtocol(trans)
 		n := NewNumericFromDouble(value)
 		trans.WriteString(n.String())
-		trans.Flush(context.Background())
+		trans.Flush()
 		s := trans.String()
 		v, e := p.ReadDouble()
 		if e != nil {
@@ -359,7 +358,7 @@ func TestWriteJSONProtocolString(t *testing.T) {
 		if e := p.WriteString(value); e != nil {
 			t.Fatalf("Unable to write %s value %v due to error: %s", thetype, value, e.Error())
 		}
-		if e := p.Flush(context.Background()); e != nil {
+		if e := p.Flush(); e != nil {
 			t.Fatalf("Unable to write %s value %v due to error flushing: %s", thetype, value, e.Error())
 		}
 		s := trans.String()
@@ -381,7 +380,7 @@ func TestReadJSONProtocolString(t *testing.T) {
 		trans := NewTMemoryBuffer()
 		p := NewTJSONProtocol(trans)
 		trans.WriteString(jsonQuote(value))
-		trans.Flush(context.Background())
+		trans.Flush()
 		s := trans.String()
 		v, e := p.ReadString()
 		if e != nil {
@@ -410,7 +409,7 @@ func TestWriteJSONProtocolBinary(t *testing.T) {
 	if e := p.WriteBinary(value); e != nil {
 		t.Fatalf("Unable to write %s value %v due to error: %s", thetype, value, e.Error())
 	}
-	if e := p.Flush(context.Background()); e != nil {
+	if e := p.Flush(); e != nil {
 		t.Fatalf("Unable to write %s value %v due to error flushing: %s", thetype, value, e.Error())
 	}
 	s := trans.String()
@@ -442,7 +441,7 @@ func TestReadJSONProtocolBinary(t *testing.T) {
 	trans := NewTMemoryBuffer()
 	p := NewTJSONProtocol(trans)
 	trans.WriteString(jsonQuote(b64String))
-	trans.Flush(context.Background())
+	trans.Flush()
 	s := trans.String()
 	v, e := p.ReadBinary()
 	if e != nil {
@@ -475,7 +474,7 @@ func TestWriteJSONProtocolList(t *testing.T) {
 		}
 	}
 	p.WriteListEnd()
-	if e := p.Flush(context.Background()); e != nil {
+	if e := p.Flush(); e != nil {
 		t.Fatalf("Unable to write %s due to error flushing: %s", thetype, e.Error())
 	}
 	str := trans.String()
@@ -529,7 +528,7 @@ func TestWriteJSONProtocolSet(t *testing.T) {
 		}
 	}
 	p.WriteSetEnd()
-	if e := p.Flush(context.Background()); e != nil {
+	if e := p.Flush(); e != nil {
 		t.Fatalf("Unable to write %s due to error flushing: %s", thetype, e.Error())
 	}
 	str := trans.String()
@@ -586,7 +585,7 @@ func TestWriteJSONProtocolMap(t *testing.T) {
 		}
 	}
 	p.WriteMapEnd()
-	if e := p.Flush(context.Background()); e != nil {
+	if e := p.Flush(); e != nil {
 		t.Fatalf("Unable to write %s due to error flushing: %s", thetype, e.Error())
 	}
 	str := trans.String()

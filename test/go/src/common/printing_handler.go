@@ -1,3 +1,5 @@
+// +build !go1.7
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
@@ -20,12 +22,13 @@
 package common
 
 import (
-	"context"
-	"encoding/hex"
 	"errors"
 	"fmt"
+	"encoding/hex"
 	. "gen/thrifttest"
 	"time"
+
+	"golang.org/x/net/context"
 )
 
 var PrintingHandler = &printingHandler{}
@@ -277,11 +280,11 @@ func (p *printingHandler) TestMapMap(ctx context.Context, hello int32) (r map[in
 func (p *printingHandler) TestInsanity(ctx context.Context, argument *Insanity) (r map[UserId]map[Numberz]*Insanity, err error) {
 	fmt.Printf("testInsanity()\n")
 	r = make(map[UserId]map[Numberz]*Insanity)
-	r[1] = map[Numberz]*Insanity{
+	r[1] = map[Numberz]*Insanity {
 		2: argument,
 		3: argument,
 	}
-	r[2] = map[Numberz]*Insanity{
+	r[2] = map[Numberz]*Insanity {
 		6: NewInsanity(),
 	}
 	return
